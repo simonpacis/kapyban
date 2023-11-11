@@ -77,6 +77,12 @@ In this example, we'll set up a Kanban board with three columns: "Backlog", "In 
      move y completed
      move u completed
      ```
+     Note that if you wanted to move all the contents of a single column to another, the swap command allows you to do so.
+
+     ```
+     swap in progress done
+     ```
+
 
 After executing these commands, all tasks initially distributed across "Backlog" and "In Progress" will be consolidated under the "Completed" column.
 
