@@ -84,13 +84,14 @@ class KapybanFileManager {
 			throw new Exception("No file uploaded");
 		}
 
-		// Further validation for the uploaded file.
-		$uploaded_file = $_FILES['file'];
-		$file_type = mime_content_type($uploaded_file['tmp_name']);
 
-		if ($file_type !== 'application/json') {
-			throw new Exception("Invalid file type");
-		}
+		$uploaded_file = $_FILES['file'];
+    $file_content = file_get_contents($uploaded_file['tmp_name']);
+
+    if (json_decode($file_content) === null && json_last_error() !== JSON_ERROR_NONE) {
+        throw new Exception("Invalid JSON content");
+    }
+
 
 		if ($uploaded_file['size'] > 2097152) {
 			throw new Exception("File size exceeds limit");

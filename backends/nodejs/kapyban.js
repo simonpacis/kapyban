@@ -34,15 +34,15 @@ function loadPasswords() {
 
 // Upload endpoint
 app.post('/upload/:filename', (req, res) => {
-    const passwordsConfig = loadPasswords();
+		const passwordsConfig = loadPasswords();
 
-    if (!passwordsConfig) {
-        return res.status(500).send('Internal server error');
+    if (!passwordsConfig || typeof passwordsConfig.file_passwords !== 'object') {
+        return res.status(500).send('Internal server error: Unable to load passwords configuration');
     }
 
     const filename = req.params.filename;
     const providedPassword = req.body.password;
-    const fileSpecificPassword = passwordsConfig.passwords[filename];
+    const fileSpecificPassword = passwordsConfig.file_passwords.hasOwnProperty(filename) ? passwordsConfig.passwords[filename] : null;
     const fallbackPassword = passwordsConfig.fallback_password;
 
     if (providedPassword !== fileSpecificPassword && providedPassword !== fallbackPassword) {
@@ -73,15 +73,16 @@ app.get('/:filename', (req, res) => {
 
         try {
             let jsonData = JSON.parse(data);
-            let visualBody = jsonData.visual_body;
+            let visualBody = jsonData.board_visual;
 
             if (!visualBody) {
                 return res.status(404).send('Visual body not found');
             }
 
             let cleanVisualBody = sanitizeHtml(visualBody, {
-                allowedTags: ['h1', 'table', 'thead', 'tbody', 'tfoot', 'tr', 'th', 'td'],
+                allowedTags: ['br', 'h1', 'table', 'thead', 'tbody', 'tfoot', 'tr', 'th', 'td'],
                 allowedAttributes: {
+										'table': ['border'],
                     'tr': ['rowspan', 'colspan'],
                     'th': ['rowspan', 'colspan', 'scope'],
                     'td': ['rowspan', 'colspan']

@@ -56,12 +56,12 @@ def view_file(filename):
     try:
         with open(os.path.join(UPLOAD_FOLDER, filename + '.json'), 'r') as file:
             content = json.load(file)
-            visual_body = content.get('visual_body', '')
+            visual_body = content.get('board_visual', '')
             html_template = f'''
                 <!doctype html>
                 <html>
                 <head>
-                    <title>Kapyban Visual Body</title>
+                    <title>Kapyban Kanban Board</title>
                 </head>
                 <body>
                     {visual_body}
@@ -81,5 +81,5 @@ def server_error(error):
     return jsonify(error="Server error"), 500
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False, port=80)
 
