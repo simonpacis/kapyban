@@ -1,14 +1,24 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
 // KapybanFileManager class handles file upload, download, and view functionalities.
 class KapybanFileManager {
 	private $directory;       // Directory to store the JSON files.
+	private $yaml_directory;       // Directory to store the JSON files.
 	private $passwords;       // Array to store passwords loaded from YAML.
 	private $fallback_password; // Fallback password for file access.
 
 	// Constructor initializes the directory and loads passwords from YAML.
 	public function __construct() {
-		$this->directory = __DIR__ . '/'; // Sets the directory to the current script's directory.
+		$this->directory = __DIR__ . '/boards/';
+		$this->yaml_directory = __DIR__ . '/';
+
+        // Check if the directory exists, if not, create it.
+        if (!is_dir($this->directory)) {
+            mkdir($this->directory, 0755, true);
+        }
 		$this->loadPasswords();           // Calls the method to load passwords from YAML file.
 	}
 
@@ -45,7 +55,7 @@ class KapybanFileManager {
 
 	// Loads passwords from the YAML file.
 	private function loadPasswords() {
-		$yaml_content = $this->nanoYAML($this->directory . 'passwords.yaml');
+		$yaml_content = $this->nanoYAML($this->yaml_directory . 'passwords.yaml');
 		if (empty($yaml_content)) {
 			throw new Exception("Unable to read or parse passwords file");
 		}
@@ -84,13 +94,14 @@ class KapybanFileManager {
 			throw new Exception("No file uploaded");
 		}
 
-		// Further validation for the uploaded file.
-		$uploaded_file = $_FILES['file'];
-		$file_type = mime_content_type($uploaded_file['tmp_name']);
 
-		if ($file_type !== 'application/json') {
-			throw new Exception("Invalid file type");
-		}
+		$uploaded_file = $_FILES['file'];
+    $file_content = file_get_contents($uploaded_file['tmp_name']);
+
+    if (json_decode($file_content) === null && json_last_error() !== JSON_ERROR_NONE) {
+        throw new Exception("Invalid JSON content");
+    }
+
 
 		if ($uploaded_file['size'] > 2097152) {
 			throw new Exception("File size exceeds limit");
@@ -133,10 +144,11 @@ class KapybanFileManager {
 		$json_content = json_decode(file_get_contents($file_path), true);
 
 		// Checks if the 'visual_body' key exists in the JSON.
-		if (!isset($json_content['visual_body'])) {
+		if (!isset($json_content['board_visual'])) {
 			throw new Exception("Invalid JSON structure");
 		}
 
+		header('Content-Type: text/html; charset=utf-8');
 		// Outputs the HTML content stored in 'visual_body' within an HTML document.
 		echo '<!DOCTYPE html>';
 		echo '<html lang="en">';
@@ -146,7 +158,7 @@ class KapybanFileManager {
 		echo '<title>Kapyban Kanban Board</title>';
 		echo '</head>';
 		echo '<body>';
-		echo htmlspecialchars($json_content['visual_body']);
+		echo $json_content['board_visual'];
 		echo '</body>';
 		echo '</html>';
 		return true;
@@ -169,13 +181,8 @@ try {
 	case 'download':
 		$file_manager->downloadFile($file_name);
 		break;
-	case 'view':
-		$file_manager->viewFile($file_name);
-		break;
 	default:
-		// Sends a 404 response for invalid routes.
-		header("HTTP/1.1 404 Not Found");
-		exit('Invalid route');
+		$file_manager->viewFile($route);
 	}
 } catch (Exception $e) {
 	// Handles exceptions and sends a 500 internal server error response.
