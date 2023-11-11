@@ -70,11 +70,11 @@ In this example, we'll set up a Kanban board with three columns: "Backlog", "In 
 3. **Move Tasks to 'Completed':**
    - Move all tasks to the "Completed" column:
      ```
-     move e Completed
-     move r Completed
-     move t Completed
-     move y Completed
-     move u Completed
+     move e completed
+     move r completed
+     move t completed
+     move y completed
+     move u completed
      ```
 
 After executing these commands, all tasks initially distributed across "Backlog" and "In Progress" will be consolidated under the "Completed" column.
