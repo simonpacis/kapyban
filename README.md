@@ -28,7 +28,7 @@ pip3 install dateparser prettytable fuzzywuzzy python-dateutil tabulate rich
 1. **Starting Kapyban:** Run the script to start the application. Optionally, pass a `.json` filename as an argument to load an existing board.
 
    ```bash
-   python kapyban.py [filename.json]
+   python3 kapyban.py [filename.json]
    ```
 
 2. **Command List:**
