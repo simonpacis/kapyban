@@ -6,7 +6,7 @@ import json
 app = Flask(__name__)
 
 # Configuration
-UPLOAD_FOLDER = 'uploads'
+UPLOAD_FOLDER = 'boards'
 ALLOWED_EXTENSIONS = {'json'}
 
 if not os.path.exists(UPLOAD_FOLDER):
