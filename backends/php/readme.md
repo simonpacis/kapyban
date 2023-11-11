@@ -36,6 +36,14 @@ This PHP script is designed to integrate with kapyban, a Python CLI kanban appli
    - Name the file `passwords.yaml` and place it in the same directory as the script.
    - Define passwords for individual files and a fallback password.
 
+     ```yaml
+     fallback_password: "your_default_password"
+     passwords:
+       board1.json: "password1"
+       board2.json: "password2"
+     ```
+
+
 ### File Structure
 
 - `kapyban.php`: The main script handling the routes and functionalities.
