@@ -6,6 +6,8 @@ Disclaimer: This project has been 95% coded by AI. Including this readme.
 
 Kapyban is a Python application designed to manage tasks using a Kanban board approach. It provides a simple, text-based interface to create, edit, move, and prioritize tasks organized in columns, mimicking a traditional Kanban board. This tool is ideal for personal task management or small team projects.
 
+<img width="1671" alt="Screenshot 2023-11-10 at 4 51 35 PM" src="https://github.com/simonpacis/kapyban/assets/7118482/51a2652c-8ae9-4103-9f20-f1d9ca06653a">
+
 ## Features
 
 - **Task Management:** Add, edit, remove, and move tasks across different columns.
