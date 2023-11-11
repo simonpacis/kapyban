@@ -1,8 +1,4 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
 // KapybanFileManager class handles file upload, download, and view functionalities.
 class KapybanFileManager {
 	private $directory;       // Directory to store the JSON files.
