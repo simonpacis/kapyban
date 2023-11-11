@@ -9,7 +9,7 @@ const app = express();
 const port = 80;
 
 // Directory to store files
-const filesDir = './files';
+const filesDir = './boards';
 
 // Ensure filesDir exists
 if (!fs.existsSync(filesDir)) {
